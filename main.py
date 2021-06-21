@@ -10,6 +10,9 @@ cnv.pack(padx=0, pady=0)
 #-------------------------------------------------------------------------------------------------------------------------------------------
 #variables initiales
 
+player = 0
+player_playing = 1
+
 #-------------------------------------------------------------------------------------------------------------------------------------------
 #class
 
@@ -39,13 +42,20 @@ def init():
 #draw
 
 def draw():
-    pass
-    
+    global player, player_playing
+    cnv.delete(player)
+    if(player_playing == 1):
+        player = cnv.create_text(250, 478, font=('Arial',35 ,'bold italic'), text="PLAYER 1 / GAUCHE", fill="#e8908b")
+    else:
+        player = cnv.create_text(250, 478, font=('Arial',35 ,'bold italic'), text="PLAYER 2 / DROITE", fill="#e8908b")
+
 #-------------------------------------------------------------------------------------------------------------------------------------------
 #control
 
 def control():
+    global player_playing
     if keyboard.is_pressed("r"):
+        player_playing = 1
         cnv.delete(ALL)
         init()
 
@@ -53,19 +63,29 @@ def control():
 #first player
 
 def firstPlayer(pos):
-    if(pos.y >= 50 and pos.y <= 450):
+    global player_playing
+    if(pos.y >= 50 and pos.y <= 450 and player_playing == 1):
+        player_playing = 2
         x = 100*int(pos.x/100)+50
         y = 100*int((50+pos.y)/100)
-        cnv.create_rectangle(x-50, y-50, x+50, y+50, fill="red")
+        cnv.create_rectangle(x-50+1, y-50+1, x+500, y+500, outline="white", fill="white")
+        if(x == 50 and y == 100):
+            cnv.delete(ALL)
+            cnv.create_text(250, 250, font=("Arial", 45, "bold"), text="PLAYER 2 WINS", fill="#e8908b")
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 #second player
 
 def secondPlayer(pos):
-    if(pos.y >= 50 and pos.y <= 450):
+    global player_playing
+    if(pos.y >= 50 and pos.y <= 450 and player_playing == 2):
+        player_playing = 1
         x = 100*int(pos.x/100)+50
         y = 100*int((50+pos.y)/100)
-        cnv.create_rectangle(x-50, y-50, x+50, y+50, fill="blue")
+        cnv.create_rectangle(x-50+1, y-50+1, x+500, y+500, outline="white", fill="white")
+        if(x == 50 and y == 100):
+            cnv.delete(ALL)
+            cnv.create_text(250, 250, font=("Arial", 45, "bold"), text="PLAYER 1 WINS", fill="#e8908b")
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 #main
